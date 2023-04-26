@@ -11,7 +11,7 @@ const db_config = {
 const { username, password, host, database } = db_config;
 
 async function dbConnect() {
-  // console.log(`[debug] dbConnect: ${username} ${host}`);
+  console.log(`[debug] dbConnect: ${username} ${host}`);
   if (!host) {
     throw new Error(
       "Please define the MONGODB_URI environment variable inside .env"
@@ -34,6 +34,7 @@ async function dbConnect() {
       opts
     )
     .then((mongoose) => {
+      console.log(`[LOG] [DB] dbConnect: connected to mongodb`)
       return mongoose;
     });
 }

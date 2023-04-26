@@ -32,4 +32,15 @@ function loadFromLocalStorage(key: string): Record<string, unknown> | null {
   }
 }
 
-export { saveToLocalStorage, loadFromLocalStorage };
+function saveUserData(userdata: Record<string, unknown>) {
+  saveToLocalStorage('user-data', userdata);
+}
+function getUserData() {
+  const data = loadFromLocalStorage('user-data');
+  if (data) {
+    return data;
+  }
+  return null;
+}
+
+export { saveToLocalStorage, loadFromLocalStorage, saveUserData, getUserData };
