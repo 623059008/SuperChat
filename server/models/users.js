@@ -17,6 +17,7 @@ const userSchema = new Schema({
   username: String,
   email: String,
   password: String,
+  type: { type: String, required: false, default: 'user' },
 });
 
 const Purchase = mongoose.model('Purchase', purchaseSchema); 
