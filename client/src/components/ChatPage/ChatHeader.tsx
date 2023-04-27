@@ -23,8 +23,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ userInfo }) => {
   const { name, avatarUrl, description, tags } = userInfo;
   
   const mainColor = useMainColor(avatarUrl || "");
-  console.log('[debug] mainColor: ', mainColor)
-  
   return (
     <div className="chat-header" style={{
       background: mainColor,

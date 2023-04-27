@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const messageSchema = new Schema({
-  id: Number,
+  id: String,
   message: String,
-  fromUser: Number,
-  toUser: Number,
+  fromUser: String,
+  toUser: String,
   created_time: Number,
 });
 

@@ -1,6 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import { ChatMessage } from './types';
-import './ChatMessageBox.css';
+import React, { useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
+import { ChatMessage } from "./types";
+import remarkGfm from "remark-gfm";
+
+import "./ChatMessageBox.css";
 
 interface ChatMessageBoxProps {
   messages: ChatMessage[];
@@ -20,12 +23,24 @@ const ChatMessageBox: React.FC<ChatMessageBoxProps> = ({ messages }) => {
   return (
     <div className="chat-message-box" ref={messageBoxRef}>
       {messages.map((message, index) => (
-        <div key={index} className={`chat-message ${message.isOpposite ? 'left' : 'right'}`}>
+        <div
+          key={index}
+          className={`chat-message ${message.isOpposite ? "left" : "right"}`}
+        >
           <div className="chat-message-row">
             {message.isOpposite && (
-              <img className="chat-message-avatar" src={message.avatarUrl} alt="avatar" />
+              <img
+                className="chat-message-avatar"
+                src={message.avatarUrl}
+                alt="avatar"
+              />
             )}
-            <div className="chat-message-content">{message.content}</div>
+            <div className="chat-message-content">
+              <ReactMarkdown
+                children={message.content}
+                remarkPlugins={[remarkGfm]}
+              />
+            </div>
           </div>
           <div className="chat-message-time">{message.sendTime}</div>
         </div>

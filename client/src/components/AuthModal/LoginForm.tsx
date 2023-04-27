@@ -45,7 +45,7 @@ const LoginForm = ({ onClose, switchBack, showInfo }: LoginFormProps) => {
       setConfirmLoading(true);
       const res = await loginRequest(email, password);
       setConfirmLoading(false);
-      console.log("[debug] login res", res);
+      // console.log("[debug] login res", res);
       // Handle successful login
       if (!res) {
         showInfo('Fail to Login');

@@ -56,6 +56,7 @@
   padding: 8px;
   font-size: 14px;
   color: #333;
+  text-align: start;
 }
 
 .chat-message-time {

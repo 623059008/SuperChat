@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import type { LoaderFunctionArgs } from "react-router-dom";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { saveToLocalStorage, loadFromLocalStorage } from '../../utils/storage';
+import { sendMessageRequest } from '../../requests';
 import ChatHeader from './ChatHeader'
 import ChatMessageBox from './ChatMessageBox';
 import ChatInput from './ChatInput';
 import { ChatMessage, ChatUser, ChatUserResponse } from './types';
 import { uuid } from '../../utils/uuid';
-import { respondToUser } from '../../utils/randomReply';
 import { userList } from '../../userdata';
 import './index.css'
 
@@ -17,31 +17,16 @@ const mockUser: ChatUser = {
   id: "1",
   name: "Joona Leppanen",
   avatarUrl: '/src/assets/avatar2.png',
-  email: 'joona.leppanen@example.com'
+  email: '',
+  prompt: '',
 }
-
-const mockMessages: ChatMessage[] = [
-  {
-    id: '1',
-    content: 'Hi there!',
-    avatarUrl: '/src/assets/avatar1.png',
-    isOpposite: false,
-    sendTime: '2023-03-16 14:00:00',
-  },
-  {
-    id: '2',
-    content: 'Hello!',
-    avatarUrl: mockUser?.picture?.thumbnail,
-    isOpposite: true,
-    sendTime: '2023-03-16 14:01:00',
-  },
-];
 
 const mockMe = {
   email: "me@gmail.com",
   avatarUrl: '/src/assets/avatar1.png',
   id: 'me',
   name: '',
+  prompt: '',
 };
 
 async function getUserInfo(id: string|undefined): Promise<Response> {
@@ -103,7 +88,7 @@ const ChatPage: React.FC = () => {
       // The first message is sent from robot
       const firstMessage: ChatMessage = {
         id: `message_${uuid()}`,
-        content: respondToUser('', mockMe, oppoUserData),
+        content: `Hi, I'm ${oppoUserData.name}.`,
         avatarUrl: oppoUserData.avatarUrl,
         isOpposite: true,
         sendTime: new Date().toLocaleString(),
@@ -114,7 +99,7 @@ const ChatPage: React.FC = () => {
   }, [oppoId]);
   
   // console.log(`[debug] oppoUserData: ${JSON.stringify(oppoUserData.id)}, messageList: ${JSON.stringify(messageList)}`)
-  const sendMessage = (message: string, userData: ChatUser) => {
+  const sendMessage = async (message: string, userData: ChatUser) => {
     const newMessage: ChatMessage = {
       id: `message_${uuid()}`,
       content: message,
@@ -126,22 +111,22 @@ const ChatPage: React.FC = () => {
     // save the message to local storage
     saveToLocalStorage(`conversation_${oppoId}`, {"conversation":[...messageList, newMessage]});
     setMessageList(tmpMessageList);
-    // response from the bot
-    setTimeout(() => {
-      const newMessage: ChatMessage = {
-        id: `message_${uuid()}`,
-        content: respondToUser(message, userData, oppoUserData),
-        avatarUrl: oppoUserData.avatarUrl,
-        isOpposite: true,
-        sendTime: new Date().toLocaleString(),
-      }
-      const tmpMessageListWithReply = [...tmpMessageList, newMessage];
-      // save the message to local storage
-      saveToLocalStorage(`conversation_${oppoId}`, {"conversation": tmpMessageListWithReply});
-      setMessageList(tmpMessageListWithReply);
-    }, 500);
+    // send to backend to get the response
+    const reply = await sendMessageRequest(message, oppoUserData);
+    console.log('[debug] response: ', reply);
+    const replyMessage: ChatMessage = {
+      id: `message_${uuid()}`,
+      content: reply.content,
+      avatarUrl: oppoUserData.avatarUrl,
+      isOpposite: true,
+      sendTime: new Date().toLocaleString(),
+    }
+    const tmpMessageListWithReply = [...tmpMessageList, replyMessage];
+    // save the message to local storage
+    saveToLocalStorage(`conversation_${oppoId}`, {"conversation": tmpMessageListWithReply});
+    setMessageList(tmpMessageListWithReply);
   };
-
+  // console.log('[debug] oppoUserData', oppoUserData)
   return (<div className="chat-page">
     <ChatHeader userInfo={oppoUserData} />
     <ChatMessageBox messages={messageList} />
