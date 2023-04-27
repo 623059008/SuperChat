@@ -2,7 +2,7 @@ Project Report
 
 # Introduction
 
-Our team consists of Tao Ren (Pitt ID: tar118) and Yongxiang Zhang (Pitt ID: ). We are excited to present our project, a web-based chat application that allows users to chat with virtual characters like famous people, AI robots, and writing helpers. The application is built using React, Vite, and Ant Design on the front-end, and Express.js, Mongoose, and MongoDB on the back-end.
+Our team consists of Tao Ren (Pitt ID: tar118) and Yongxiang Zhang (Pitt ID: yoz31). We are excited to present our project, a web-based chat application that allows users to chat with virtual characters like famous people, AI robots, and writing helpers. The application is built using React, Vite, and Ant Design on the front-end, and Express.js, Mongoose, and MongoDB on the back-end.
 
 # Objective
 
