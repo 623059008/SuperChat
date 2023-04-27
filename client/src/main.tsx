@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import ChatPage, { chatLoader } from './components/ChatPage'
+import ManagePage from './components/ManagePage'
 import {
   createBrowserRouter,
   RouterProvider,

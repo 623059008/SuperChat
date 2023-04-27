@@ -1,6 +1,6 @@
-# ChatMeta Demo
+# SuperChat Demo
 
-Here is a web app demo of ChatMeta.
+Here is a web app demo of SuperChat.
 You can chat with virtual characters from Animation, Video Game, Real Stars in this web app.
 Have fun!
 
