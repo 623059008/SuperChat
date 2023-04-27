@@ -1,5 +1,7 @@
 // Require Dependencies
+require('dotenv').config()
 const express = require("express");
+const dbConnect = require("./server/models/dbConnect");
 const routes = require("./server/routes");
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -21,6 +23,8 @@ if (process.env.NODE_ENV === "production") {
 
 // Add routes, both API and view
 app.use(routes);
+
+dbConnect();
 
 // Insert DB Info here =============================
 

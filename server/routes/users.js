@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const jwtManager = require("./access");
 const { User, Purchase } = require("../models/users");
 
 // GET /users
@@ -10,6 +11,11 @@ router.get("/", async (req, res) => {
 
 // GET /users/:id
 router.get("/:id", async (req, res) => {
+  const session  = req.headers["x-session"];
+  const isValid = jwtManager.verify(session);
+  if(!isValid) {
+    return res.status(401).json({error: 'Unauthorized'})
+  }
   const id = parseInt(req.params.id);
   const user = await User.findOne({ id });
   const purchases = await Purchase.find({userId: id});
@@ -36,6 +42,11 @@ router.post("/", async (req, res) => {
 
 // PUT /users/:id
 router.put("/:id", async (req, res) => {
+  const session  = req.headers["x-session"];
+  const isValid = jwtManager.verify(session);
+  if(!isValid) {
+    return res.status(401).json({error: 'Unauthorized'})
+  }
   const id = parseInt(req.params.id);
   const { username, email, password } = req.body;
   const user = await User.findOneAndUpdate(
@@ -54,6 +65,11 @@ router.put("/:id", async (req, res) => {
 
 // DELETE /users/:id
 router.delete("/:id", async (req, res) => {
+  const session  = req.headers["x-session"];
+  const isValid = jwtManager.verify(session);
+  if(!isValid) {
+    return res.status(401).json({error: 'Unauthorized'})
+  }
   const id = parseInt(req.params.id);
   const user = await User.findOneAndDelete({ id });
   res.json(user);
@@ -61,6 +77,11 @@ router.delete("/:id", async (req, res) => {
 
 // POST /users/:id/purchases
 router.post("/:id/purchases", async (req, res) => {
+  const session  = req.headers["x-session"];
+  const isValid = jwtManager.verify(session);
+  if(!isValid) {
+    return res.status(401).json({error: 'Unauthorized'})
+  }
   const id = parseInt(req.params.id);
   const { type, start_time, expire_time, maxCount, purchase_key } = req.body;
   const user = await User.findOne({ id });
@@ -87,6 +108,11 @@ router.post("/:id/purchases", async (req, res) => {
 
 // GET /users/:id/purchases
 router.get("/:id/purchases", async (req, res) => {
+  const session  = req.headers["x-session"];
+  const isValid = jwtManager.verify(session);
+  if(!isValid) {
+    return res.status(401).json({error: 'Unauthorized'})
+  }
   const id = parseInt(req.params.id);
   const purchase = await Purchase.findOne({ userId: id });
   if (!purchase) {
@@ -98,6 +124,11 @@ router.get("/:id/purchases", async (req, res) => {
 
 // PUT /users/:id/purchases/:pid
 router.put("/:id/purchases/:pid", async (req, res) => {
+  const session  = req.headers["x-session"];
+  const isValid = jwtManager.verify(session);
+  if(!isValid) {
+    return res.status(401).json({error: 'Unauthorized'})
+  }
   const id = parseInt(req.params.id);
   const pid = parseInt(req.params.pid);
   const { type, start_time, expire_time, maxCount, purchase_key } = req.body;
@@ -119,6 +150,11 @@ router.put("/:id/purchases/:pid", async (req, res) => {
 
 // DELETE /users/:id/purchases/:pid
 router.delete("/:id/purchases/:pid", async (req, res) => {
+  const session  = req.headers["x-session"];
+  const isValid = jwtManager.verify(session);
+  if(!isValid) {
+    return res.status(401).json({error: 'Unauthorized'})
+  }
   const id = parseInt(req.params.id);
   const pid = parseInt(req.params.pid);
   const del = await Purchase.findOneAndDelete({

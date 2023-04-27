@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Outlet } from "react-router-dom";
+import AuthModal from './components/AuthModal/AuthModal'
 import ProfileCard from './components/ProfileCard'
 import {ChatUser} from './components/ChatPage/types'
 import { userList } from './userdata';
@@ -46,6 +47,7 @@ function App() {
 
   return (
     <div className="App">
+      <AuthModal />
       <div className="left-panel" ref={leftPanelRef}>
         {userList.map((user: ChatUser) => 
           <div key={`usercard_${user.id}`} className={`card-item ${user.id == String(selected) ? 'active' : ''}`}>

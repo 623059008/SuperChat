@@ -1,0 +1,20 @@
+.text-align-left {
+  text-align: left!important;
+}
+
+.text-gray-500 { 
+  color: var(--gray);
+}
+
+.no-padding {
+  padding: 0!important;
+}
+
+.user-policy-content {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+}
+form {
+  background-color: #fff!important;
+}
