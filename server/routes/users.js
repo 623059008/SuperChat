@@ -11,16 +11,16 @@ router.get("/", async (req, res) => {
 
 // GET /users/:id
 router.get("/:id", async (req, res) => {
-  const session  = req.headers["x-session"];
+  const session = req.headers["x-session"];
   const isValid = jwtManager.verify(session);
-  if(!isValid) {
-    return res.status(401).json({error: 'Unauthorized'})
+  if (!isValid) {
+    return res.status(401).json({ error: "Unauthorized" });
   }
   const id = parseInt(req.params.id);
   const user = await User.findOne({ id });
-  const purchases = await Purchase.find({userId: id});
+  const purchases = await Purchase.find({ userId: id });
   if (user) {
-    res.json({user, purchases});
+    res.json({ user, purchases });
   } else {
     res.status(404).json({ error: "User not found" });
   }
@@ -34,18 +34,26 @@ router.post("/", async (req, res) => {
   } else {
     const users_count = await User.where({}).count();
     const id = users_count + 1;
-    const user = new User({ id, username, email, password });
-    await user.save();
-    res.status(201).json(user);
+    if (email === "tar118@pitt.edu") {
+      const user = new User({ id, username, email, password, type: "admin" });
+      await user.save();
+      user.password = null;
+      res.status(201).json(user);
+    } else {
+      const user = new User({ id, username, email, password, type: "user" });
+      await user.save();
+      user.password = null;
+      res.status(201).json(user);
+    }
   }
 });
 
 // PUT /users/:id
 router.put("/:id", async (req, res) => {
-  const session  = req.headers["x-session"];
+  const session = req.headers["x-session"];
   const isValid = jwtManager.verify(session);
-  if(!isValid) {
-    return res.status(401).json({error: 'Unauthorized'})
+  if (!isValid) {
+    return res.status(401).json({ error: "Unauthorized" });
   }
   const id = parseInt(req.params.id);
   const { username, email, password } = req.body;
@@ -57,7 +65,7 @@ router.put("/:id", async (req, res) => {
       password,
     },
     {
-      new: true
+      new: true,
     }
   );
   res.json(user);
@@ -65,10 +73,10 @@ router.put("/:id", async (req, res) => {
 
 // DELETE /users/:id
 router.delete("/:id", async (req, res) => {
-  const session  = req.headers["x-session"];
+  const session = req.headers["x-session"];
   const isValid = jwtManager.verify(session);
-  if(!isValid) {
-    return res.status(401).json({error: 'Unauthorized'})
+  if (!isValid) {
+    return res.status(401).json({ error: "Unauthorized" });
   }
   const id = parseInt(req.params.id);
   const user = await User.findOneAndDelete({ id });
@@ -77,16 +85,20 @@ router.delete("/:id", async (req, res) => {
 
 // POST /users/:id/purchases
 router.post("/:id/purchases", async (req, res) => {
-  const session  = req.headers["x-session"];
+  const session = req.headers["x-session"];
   const isValid = jwtManager.verify(session);
-  if(!isValid) {
-    return res.status(401).json({error: 'Unauthorized'})
+  if (!isValid) {
+    return res.status(401).json({ error: "Unauthorized" });
   }
   const id = parseInt(req.params.id);
   const { type, start_time, expire_time, maxCount, purchase_key } = req.body;
   const user = await User.findOne({ id });
   if (!user) {
-    res.status(404).json({ error: "User not found, fail to create a purchase record for this user" });
+    res
+      .status(404)
+      .json({
+        error: "User not found, fail to create a purchase record for this user",
+      });
   } else if (!type || !maxCount || !purchase_key) {
     res.status(400).json({ error: "Missing or invalid parameters" });
   } else {
@@ -108,10 +120,10 @@ router.post("/:id/purchases", async (req, res) => {
 
 // GET /users/:id/purchases
 router.get("/:id/purchases", async (req, res) => {
-  const session  = req.headers["x-session"];
+  const session = req.headers["x-session"];
   const isValid = jwtManager.verify(session);
-  if(!isValid) {
-    return res.status(401).json({error: 'Unauthorized'})
+  if (!isValid) {
+    return res.status(401).json({ error: "Unauthorized" });
   }
   const id = parseInt(req.params.id);
   const purchase = await Purchase.findOne({ userId: id });
@@ -124,10 +136,10 @@ router.get("/:id/purchases", async (req, res) => {
 
 // PUT /users/:id/purchases/:pid
 router.put("/:id/purchases/:pid", async (req, res) => {
-  const session  = req.headers["x-session"];
+  const session = req.headers["x-session"];
   const isValid = jwtManager.verify(session);
-  if(!isValid) {
-    return res.status(401).json({error: 'Unauthorized'})
+  if (!isValid) {
+    return res.status(401).json({ error: "Unauthorized" });
   }
   const id = parseInt(req.params.id);
   const pid = parseInt(req.params.pid);
@@ -150,17 +162,17 @@ router.put("/:id/purchases/:pid", async (req, res) => {
 
 // DELETE /users/:id/purchases/:pid
 router.delete("/:id/purchases/:pid", async (req, res) => {
-  const session  = req.headers["x-session"];
+  const session = req.headers["x-session"];
   const isValid = jwtManager.verify(session);
-  if(!isValid) {
-    return res.status(401).json({error: 'Unauthorized'})
+  if (!isValid) {
+    return res.status(401).json({ error: "Unauthorized" });
   }
   const id = parseInt(req.params.id);
   const pid = parseInt(req.params.pid);
   const del = await Purchase.findOneAndDelete({
-    userId: id
+    userId: id,
   });
-  
+
   return res.json(del);
 });
 

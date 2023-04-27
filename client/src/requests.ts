@@ -2,6 +2,19 @@ import { getUserData } from "./utils/storage";
 import { uuid } from "./utils/uuid";
 import { ChatMessage, ChatUser } from "./components/ChatPage/types";
 
+export const sendUsersRequest = async() => {
+  const response = await fetch("/users/", {
+    method: "GET",
+    headers: { "Content-Type": "application/json", "x-session": getUserData()?.session as string },
+  });
+  console.log(`response: ${response}`);
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message);
+  }
+  return response.json();
+}
+
 export const sendMessageRequest = async (message: string, robotData: ChatUser) => {
   const userData = getUserData()
   const newMessage = {

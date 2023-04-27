@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const db_config = {
-  host: "cluster0.i3zt4mt.mongodb.net",
+  host: "cluster0.asdhycm.mongodb.net",
   port: 27017,
   username: process.env.MONGOOSE_USERNAME,
   password: process.env.MONGOOSE_PASSWORD,

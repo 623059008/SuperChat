@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { InputRef } from 'antd';
 import { Button, Form, Input, Popconfirm, Table } from 'antd';
+import { sendUsersRequest } from '../../requests';
 import type { FormInstance } from 'antd/es/form';
 import './index.css';
 
@@ -125,6 +126,24 @@ const UserInfo: React.FC = () => {
     },
   ]);
 
+  useEffect(()=> {
+    // get users data from backend
+    async function initUserData() {
+      const res = await sendUsersRequest();
+      if(!res) {
+        console.log(`[debug] get user response error`);
+        return;
+      }
+      console.log(`[debug] get user response`,res);
+      setDataSource(res.map((item:any) => ({
+        key: item.id,
+        name: item.username,
+        email: item.email,
+      })));
+    }
+    initUserData();
+  }, [])
+
   const [count, setCount] = useState(2);
 
   const handleDelete = (key: React.Key) => {
@@ -141,11 +160,7 @@ const UserInfo: React.FC = () => {
     },
     {
       title: 'age',
-      dataIndex: 'age',
-    },
-    {
-      title: 'address',
-      dataIndex: 'address',
+      dataIndex: 'email',
     },
     {
       title: 'operation',
@@ -206,9 +221,9 @@ const UserInfo: React.FC = () => {
 
   return (
     <div>
-      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-        Add a row
-      </Button>
+      {/* <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+        Add a User
+      </Button> */}
       <Table
         components={components}
         rowClassName={() => 'editable-row'}

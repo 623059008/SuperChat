@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import AuthModal from './components/AuthModal/AuthModal'
 import ProfileCard from './components/ProfileCard'
 import ManagePage from './components/ManagePage'
+import UserButton from './components/UserButton/UserButton';
 import {ChatUser} from './components/ChatPage/types'
 import { loadFromLocalStorage } from './utils/storage';
 import { userList } from './userdata';
@@ -54,6 +55,7 @@ function App() {
     {userType === 'admin' && <ManagePage />}
     {userType === 'user' && <div className="App">
       <div className="left-panel" ref={leftPanelRef}>
+        <UserButton />
         {userList.map((user: ChatUser) => 
           <div key={`usercard_${user.id}`} className={`card-item ${user.id == String(selected) ? 'active' : ''}`}>
             <ProfileCard

@@ -34,8 +34,11 @@ router.post("/", async (req, res) => {
     const session = jwtManager.generate(payloadForSession);
     // 31 days for expire time
     const expire_time = now + 31 * 24 * 3600 * 1000;
+    
     const createdSession = {
       userId: user._id,
+      username: user.username,
+      type: user.type,
       session: session,
       start_time: now,
       expire_time,

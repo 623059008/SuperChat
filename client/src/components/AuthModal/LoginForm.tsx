@@ -51,9 +51,11 @@ const LoginForm = ({ onClose, switchBack, showInfo }: LoginFormProps) => {
         showInfo('Fail to Login');
         return;
       }
-      saveUserData({userId: res.userId, email: email, session: res.session});
+      saveUserData({userId: res.userId, email: email, session: res.session, username: res.username, type: res.type});
       showInfo('Login Success!', "success");
       onClose();
+      // refresh page
+      window.location.reload();
     } catch (err: any) {
       console.log("[debug] login err", err)
       showInfo(err.message);
