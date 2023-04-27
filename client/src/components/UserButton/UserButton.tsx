@@ -57,9 +57,9 @@ const UserMenu: React.FC = () => {
         onUpdate={handleUpdateUser}
       />
       <Dropdown menu={{ items }}>
-        <UserOutlined />
+        <UserOutlined size={32} />
       </Dropdown>
-      <h4>{`Welcome, ${username}`}</h4>
+      <span>{`Welcome, ${username}`}</span>
     </div>
   );
 };
