@@ -16,15 +16,19 @@
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
-    "antd": "^5.4.6",
+    "concurrently": "^8.0.1",
+    "create-react-app": "^5.0.1",
+    "express": "^4.18.2",
+    "global": "^4.4.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
+    "mongoose": "^7.0.5",
+    "nodemon": "^2.0.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-markdown": "^8.0.7",
     "react-router-dom": "^6.9.0",
-    "remark-gfm": "^3.0.1",
-    "sort-by": "^1.2.0"
+    "sort-by": "^1.2.0",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

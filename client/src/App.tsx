@@ -2,7 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { Outlet } from "react-router-dom";
 import AuthModal from './components/AuthModal/AuthModal'
 import ProfileCard from './components/ProfileCard'
+import ManagePage from './components/ManagePage'
 import {ChatUser} from './components/ChatPage/types'
+import { loadFromLocalStorage } from './utils/storage';
 import { userList } from './userdata';
 
 import './App.css'
@@ -19,6 +21,7 @@ const getUrlParams = () => {
 function App() {
   const [selected, setSelected] = useState(getUrlParams());
   const leftPanelRef = useRef<HTMLDivElement>(null);
+  const userType = loadFromLocalStorage('user-data')?.type || 'user';
 
   useEffect(() => {
     const selectedElement = document.querySelector(`.card-item.active`) as HTMLDivElement;
@@ -46,8 +49,10 @@ function App() {
   }, [selected]);
 
   return (
-    <div className="App">
-      <AuthModal />
+    <>
+    <AuthModal />
+    {userType === 'admin' && <ManagePage />}
+    {userType === 'user' && <div className="App">
       <div className="left-panel" ref={leftPanelRef}>
         {userList.map((user: ChatUser) => 
           <div key={`usercard_${user.id}`} className={`card-item ${user.id == String(selected) ? 'active' : ''}`}>
@@ -62,7 +67,8 @@ function App() {
       <div className="right-panel">
         <Outlet />
       </div>
-    </div>
+    </div>}
+    </>
   )
 }
 
